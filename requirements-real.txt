@@ -1,4 +1,4 @@
-﻿# Real-data extras (Colab / local only) — NOT needed for the synthetic notebooks or CI smoke.
+# Real-data extras (Colab / local only) — NOT needed for the synthetic notebooks or CI smoke.
 # Install alongside requirements-lock.txt when validating the track load() paths.
 #
 # Pinned to the versions the tracks were validated with (see tracks/dataset_manifest.json).
@@ -6,4 +6,5 @@
 # record parsing and quietly shift a baseline. Re-run tools/build_dataset_manifest.py --verify
 # after any bump.
 mne==1.10.1          # Sleep-EDF PSG/hypnogram EDF reading
-wfdb==4.3.1          # PhysioNet WFDB records (ECG CinC-2017). 4.3.0 fails to import under pandas>=3
+wfdb==4.3.0          # PhysioNet WFDB records (ECG CinC-2017, CTG, BCI)
+pandas<3             # wfdb 4.3.0 fails to import with pandas 3 (pulled in unpinned otherwise)
