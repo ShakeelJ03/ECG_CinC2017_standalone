@@ -134,11 +134,14 @@
    31
   ]
  ],
- "seconds": 11.4,
+ "seconds": 15.7,
  "id": "E06",
  "stage": "3 spectral",
  "ref": "E03a",
  "why": "parametric AR spectrum instead of Welch for the band-power features",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": -0.003567359174429066,
   "delta_sd": 0.02579462901687386,

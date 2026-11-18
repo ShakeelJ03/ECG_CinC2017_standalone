@@ -144,11 +144,14 @@
    32
   ]
  ],
- "seconds": 13.1,
+ "seconds": 16.0,
  "id": "E04",
  "stage": "3 features",
  "ref": "E03a",
  "why": "morphology on top of the rhythm features",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": 0.007790495148039467,
   "delta_sd": 0.04082229351416124,

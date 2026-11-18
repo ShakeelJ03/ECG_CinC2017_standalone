@@ -110,9 +110,12 @@
    22
   ]
  ],
- "seconds": 7.8,
+ "seconds": 13.8,
  "id": "E00",
  "stage": "baseline",
  "ref": null,
- "why": "supplied baseline unchanged (11 features, RF, class weights) \u2014 the floor"
+ "why": "supplied baseline unchanged (11 features, RF, class weights) \u2014 the floor",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017"
 }

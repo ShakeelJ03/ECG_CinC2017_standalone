@@ -115,11 +115,14 @@
    28
   ]
  ],
- "seconds": 9.4,
+ "seconds": 11.0,
  "id": "E03e",
  "stage": "3 features",
  "ref": "E02",
  "why": "+3 Hilbert-envelope periodicity features (rhythm regularity without a beat detector)",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": 0.0006131249445053655,
   "delta_sd": 0.027680073353660867,

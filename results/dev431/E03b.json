@@ -123,11 +123,14 @@
    31
   ]
  ],
- "seconds": 11.6,
+ "seconds": 12.3,
  "id": "E03b",
  "stage": "3 features",
  "ref": "E02",
  "why": "+11 morphology features (template correlation, QRS width, P wave, QRST-cancelled atrial activity)",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": 0.05088416494755376,
   "delta_sd": 0.043431325286890296,

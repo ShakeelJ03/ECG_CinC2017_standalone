@@ -113,12 +113,13 @@ def main():
     H = Harness(args.data)
     out_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                            "results", args.tag)
-    res, rows = {}, []
+    res = {}
     today, commit = datetime.date.today().isoformat(), _commit()
     for i in order:
         _, stage, ref, cfg, why = plan[i]
         r = H.run({**cfg, "seed": 0}, name=f"{i} {stage}")
-        r.update({"id": i, "stage": stage, "ref": ref, "why": why})
+        r.update({"id": i, "stage": stage, "ref": ref, "why": why, "date": today, "commit": commit,
+                  "data": args.data, "n_records": len(H.y)})
         if ref and ref in res:
             r["vs_ref"] = H.compare(r, res[ref])
             v = r["vs_ref"]
@@ -126,24 +127,40 @@ def main():
                   f"{v['noise_floor']:.3f}), better in {v['wins']}/{v['n']} folds → {v['verdict']}")
         res[i] = r
         save(r, os.path.join(out_dir, f"{i}.json"))
+    write_table(out_dir, args.data, H)
+
+
+def write_table(out_dir, data, H):
+    """Rebuild table.md from EVERY result saved under this tag (not only this run), in plan
+    order, so running a few experiments with --only never wipes the other rows."""
+    import glob
+    import json
+    saved = {}
+    for p in glob.glob(os.path.join(out_dir, "E*.json")):
+        with open(p, encoding="utf-8") as f:
+            r = json.load(f)
+        saved[r.get("id", os.path.basename(p)[:-5])] = r
+    rows = []
+    for i in [p[0] for p in PLAN if p[0] in saved]:
+        r = saved[i]
         m, s = r["mean"], r["sd"]
         lo, hi = min(r["fold_macro_f1"]), max(r["fold_macro_f1"])
         metric = (f"macro-F1 {m['macro_f1']:.3f} (sd {s['macro_f1']:.3f}, range {lo:.2f}–{hi:.2f} "
                   f"across 25 record-grouped folds); κ {m['kappa']:.3f}; F1 N/A/O/~ "
                   f"{m['f1_N']:.2f}/{m['f1_A']:.2f}/{m['f1_O']:.2f}/{m['f1_~']:.2f}")
-        better = "— (baseline)" if not ref else (
-            f"vs {ref}: Δ {r['vs_ref']['delta']:+.3f}, {r['vs_ref']['wins']}/25 folds — "
-            f"**{r['vs_ref']['verdict']}**")
-        rows.append(f"| {i} | {today} | {why} | {metric} | {better} |  | `{commit}` |")
-
-    hdr = (f"Data: `{args.data}` — {H.counts} ({len(H.y)} records). Split unit: record. "
-           f"Configurations compared: {len(order)}.\n\n"
+        v = r.get("vs_ref")
+        better = "— (baseline)" if not v else (
+            f"vs {r['ref']}: Δ {v['delta']:+.3f}, {v['wins']}/25 folds — **{v['verdict']}**")
+        rows.append(f"| {i} | {r.get('date', '?')} | {r['why']} | {metric} | {better} |  "
+                    f"| `{r.get('commit', '?')}` |")
+    hdr = (f"Data: `{data}` — {H.counts} ({len(H.y)} records). Split unit: record. "
+           f"Configurations compared: {len(rows)}.\n\n"
            "| # | Date | What changed & why | Primary metric with spread | Better than reference? "
            "| If not — why kept | Commit |\n|---|---|---|---|---|---|---|\n")
     os.makedirs(out_dir, exist_ok=True)
     with open(os.path.join(out_dir, "table.md"), "w", encoding="utf-8") as f:
         f.write(hdr + "\n".join(rows) + "\n")
-    print(f"\nwrote {out_dir}/table.md — paste the rows into RESULTS.md")
+    print(f"\nwrote {out_dir}/table.md ({len(rows)} rows) — paste the rows into RESULTS.md")
 
 
 if __name__ == "__main__":

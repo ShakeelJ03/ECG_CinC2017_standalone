@@ -165,11 +165,14 @@
    30
   ]
  ],
- "seconds": 12.8,
+ "seconds": 15.6,
  "id": "E09",
  "stage": "4 selection",
  "ref": "E05",
  "why": "keep the 25 most informative of 62 features (fit inside each fold)",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": -0.014259330568677484,
   "delta_sd": 0.038240664485838,

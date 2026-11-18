@@ -138,11 +138,14 @@
    28
   ]
  ],
- "seconds": 11.1,
+ "seconds": 12.2,
  "id": "E10",
  "stage": "2 preprocess (revisit)",
  "ref": "E03a",
  "why": "REVISIT E01c: is denoising still harmful once the detector is robust?",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": -0.0034768748015386475,
   "delta_sd": 0.030936342770497557,

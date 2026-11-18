@@ -111,11 +111,14 @@
    22
   ]
  ],
- "seconds": 8.7,
+ "seconds": 27.7,
  "id": "E01b",
  "stage": "2 preprocess",
  "ref": "E00",
  "why": "db4 wavelet denoising: removes transients without a fixed band",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": 0.004007291295485263,
   "delta_sd": 0.03511890233197686,

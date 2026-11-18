@@ -115,11 +115,14 @@
    20
   ]
  ],
- "seconds": 9.1,
+ "seconds": 12.2,
  "id": "E01c",
  "stage": "2 preprocess",
  "ref": "E00",
  "why": "per-noise-type denoise (median \u2192 high-pass 0.5 Hz \u2192 notch)",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": -0.029048798936350918,
   "delta_sd": 0.04445386696877818,

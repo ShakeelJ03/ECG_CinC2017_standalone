@@ -116,11 +116,14 @@
    23
   ]
  ],
- "seconds": 9.6,
+ "seconds": 23.3,
  "id": "E01a",
  "stage": "2 preprocess",
  "ref": "E00",
  "why": "0.5\u201340 Hz band-pass + 50 Hz notch: removes wander/hum, may blunt the QRS",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": -0.008436867887662004,
   "delta_sd": 0.0407559196592655,

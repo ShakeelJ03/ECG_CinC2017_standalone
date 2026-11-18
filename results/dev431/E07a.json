@@ -134,11 +134,14 @@
    31
   ]
  ],
- "seconds": 25.2,
+ "seconds": 27.4,
  "id": "E07a",
  "stage": "5 classifier",
  "ref": "E03a",
  "why": "gradient boosting instead of random forest",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": -0.005938160101609453,
   "delta_sd": 0.05277815929890013,

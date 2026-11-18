@@ -132,11 +132,14 @@
    19
   ]
  ],
- "seconds": 10.4,
+ "seconds": 12.1,
  "id": "E12",
  "stage": "3 QRS (revisit)",
  "ref": "E03a",
  "why": "REVISIT E02: the rhythm features with the supplied detector \u2014 how much rests on R-peaks?",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": -0.11906935354338881,
   "delta_sd": 0.08720349490254485,

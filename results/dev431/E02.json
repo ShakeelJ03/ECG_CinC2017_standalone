@@ -111,11 +111,14 @@
    29
   ]
  ],
- "seconds": 8.1,
+ "seconds": 10.8,
  "id": "E02",
  "stage": "3 QRS detection",
  "ref": "E00",
  "why": "Pan\u2013Tompkins with adaptive thresholds + search-back instead of one global 30 % threshold",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": 0.034741109183369284,
   "delta_sd": 0.08201074226406362,

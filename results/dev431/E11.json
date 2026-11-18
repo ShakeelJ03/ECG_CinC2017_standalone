@@ -139,11 +139,14 @@
    31
   ]
  ],
- "seconds": 11.5,
+ "seconds": 12.2,
  "id": "E11",
  "stage": "2 preprocess (revisit)",
  "ref": "E10",
  "why": "REVISIT: denoise for rhythm, but quality features from the raw strip",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": 0.008308256595505327,
   "delta_sd": 0.021612534109705,

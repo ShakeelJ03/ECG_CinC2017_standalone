@@ -163,11 +163,14 @@
    31
   ]
  ],
- "seconds": 12.5,
+ "seconds": 18.6,
  "id": "E05",
  "stage": "3 features",
  "ref": "E03a",
  "why": "every feature group together (62 features)",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": 0.010884028494612572,
   "delta_sd": 0.04276212740495149,

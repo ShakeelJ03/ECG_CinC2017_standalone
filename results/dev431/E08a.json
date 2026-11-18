@@ -134,11 +134,14 @@
    31
   ]
  ],
- "seconds": 10.4,
+ "seconds": 12.2,
  "id": "E08a",
  "stage": "5 imbalance",
  "ref": "E03a",
  "why": "no class weights: does the minority-class handling matter?",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": -0.00843011984044662,
   "delta_sd": 0.0472455480215686,

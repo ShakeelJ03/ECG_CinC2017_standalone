@@ -119,11 +119,14 @@
    25
   ]
  ],
- "seconds": 9.9,
+ "seconds": 12.1,
  "id": "E03d",
  "stage": "3 features",
  "ref": "E02",
  "why": "+7 db4 wavelet sub-band energies (second feature domain)",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": -0.02260561914974895,
   "delta_sd": 0.04273649973750498,

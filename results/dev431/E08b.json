@@ -134,11 +134,14 @@
    31
   ]
  ],
- "seconds": 15.9,
+ "seconds": 19.6,
  "id": "E08b",
  "stage": "5 imbalance",
  "ref": "E03a",
  "why": "SMOTE inside the fold instead of class weights",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": 0.002059736309310849,
   "delta_sd": 0.038064410458633645,

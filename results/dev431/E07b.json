@@ -134,11 +134,14 @@
    29
   ]
  ],
- "seconds": 0.6,
+ "seconds": 0.8,
  "id": "E07b",
  "stage": "5 classifier",
  "ref": "E03a",
  "why": "RBF-SVM (scaled) instead of random forest",
+ "date": "2026-11-18",
+ "commit": "8285397",
+ "data": "data_cache/ecg_cinc2017",
  "vs_ref": {
   "delta": -0.008501379875563769,
   "delta_sd": 0.061893680981045876,
