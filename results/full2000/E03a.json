@@ -133,13 +133,13 @@
    25
   ]
  ],
- "seconds": 43.2,
+ "seconds": 28.9,
  "id": "E03a",
  "stage": "3 features",
  "ref": "E02",
  "why": "+21 rhythm features (Poincar\u00e9, sample entropy/COSEn, Lorenz plot, \u0394RR autocorrelation)",
  "date": "2026-11-18",
- "commit": "07f7809",
+ "commit": "3449ce5",
  "data": "C:/cm2013_data/ecg/train",
  "vs_ref": {
   "delta": 0.05668871831328895,

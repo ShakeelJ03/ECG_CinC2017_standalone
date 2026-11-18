@@ -110,12 +110,12 @@
    18
   ]
  ],
- "seconds": 43.9,
+ "seconds": 19.0,
  "id": "E00",
  "stage": "baseline",
  "ref": null,
  "why": "supplied baseline unchanged (11 features, RF, class weights) \u2014 the floor",
  "date": "2026-11-18",
- "commit": "07f7809",
+ "commit": "3449ce5",
  "data": "C:/cm2013_data/ecg/train"
 }
