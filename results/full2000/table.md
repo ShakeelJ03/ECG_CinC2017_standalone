@@ -1,0 +1,12 @@
+Data: `C:/cm2013_data/ecg/train` — {'N': 1200, 'A': 173, 'O': 567, '~': 59} (1999 records). Split unit: record. Configurations compared: 8.
+
+| # | Date | What changed & why | Primary metric with spread | Better than reference? | If not — why kept | Commit |
+|---|---|---|---|---|---|---|
+| E00 | 2026-11-18 | supplied baseline unchanged (11 features, RF, class weights) — the floor | macro-F1 0.590 (sd 0.041, range 0.51–0.67 across 25 record-grouped folds); κ 0.484; F1 N/A/O/~ 0.83/0.60/0.56/0.37 | — (baseline) |  | `07f7809` |
+| E02 | 2026-11-18 | Pan–Tompkins with adaptive thresholds + search-back instead of one global 30 % threshold | macro-F1 0.650 (sd 0.040, range 0.56–0.73 across 25 record-grouped folds); κ 0.557; F1 N/A/O/~ 0.86/0.64/0.60/0.50 | vs E00: Δ +0.061, 24/25 folds — **real gain** |  | `07f7809` |
+| E03a | 2026-11-18 | +21 rhythm features (Poincaré, sample entropy/COSEn, Lorenz plot, ΔRR autocorrelation) | macro-F1 0.707 (sd 0.041, range 0.61–0.77 across 25 record-grouped folds); κ 0.647; F1 N/A/O/~ 0.88/0.78/0.69/0.48 | vs E02: Δ +0.057, 22/25 folds — **real gain** |  | `07f7809` |
+| E04 | 2026-11-18 | morphology on top of the rhythm features | macro-F1 0.747 (sd 0.031, range 0.70–0.82 across 25 record-grouped folds); κ 0.671; F1 N/A/O/~ 0.89/0.81/0.71/0.58 | vs E03a: Δ +0.040, 21/25 folds — **real gain** |  | `07f7809` |
+| E05 | 2026-11-18 | every feature group together (62 features) | macro-F1 0.739 (sd 0.037, range 0.66–0.81 across 25 record-grouped folds); κ 0.675; F1 N/A/O/~ 0.89/0.80/0.72/0.55 | vs E03a: Δ +0.032, 21/25 folds — **real gain** |  | `07f7809` |
+| E07a | 2026-11-18 | gradient boosting instead of random forest | macro-F1 0.719 (sd 0.032, range 0.66–0.79 across 25 record-grouped folds); κ 0.647; F1 N/A/O/~ 0.87/0.78/0.70/0.53 | vs E03a: Δ +0.012, 13/25 folds — **no detectable difference** |  | `07f7809` |
+| E07b | 2026-11-18 | RBF-SVM (scaled) instead of random forest | macro-F1 0.695 (sd 0.032, range 0.63–0.76 across 25 record-grouped folds); κ 0.644; F1 N/A/O/~ 0.87/0.76/0.71/0.44 | vs E03a: Δ -0.012, 7/25 folds — **no detectable difference** |  | `07f7809` |
+| E10 | 2026-11-18 | REVISIT E01c: is denoising still harmful once the detector is robust? | macro-F1 0.711 (sd 0.040, range 0.62–0.78 across 25 record-grouped folds); κ 0.651; F1 N/A/O/~ 0.88/0.79/0.70/0.48 | vs E03a: Δ +0.004, 13/25 folds — **no detectable difference** |  | `07f7809` |
