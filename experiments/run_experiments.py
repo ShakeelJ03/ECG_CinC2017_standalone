@@ -80,6 +80,9 @@ PLAN = [
      "+9 signal-quality indices on top of E04, aimed at the weak Noisy class"),
     ("E14", "5 classifier", "E04", {"qrs": "pt", "feature_set": "base+rr+morph", "clf": "hgb"},
      "gradient boosting on the E04 features instead of random forest"),
+    # ---- added 2026-11-25 after the all-data run: Other→Normal is the largest remaining error ----
+    ("E15", "3 features (Other)", "E14", {"qrs": "pt", "feature_set": "base+rr+morph+ect", "clf": "hgb"},
+     "+7 beat-by-beat ectopy features (abnormal/premature beats, 2nd template, QRS width, P→R), aimed at Other"),
 ]
 
 #: the short list to re-run on the large (~2,000-record) training set for the final comparison
@@ -87,6 +90,9 @@ FINAL_SET = ["E00", "E02", "E03a", "E04", "E05", "E07a", "E07b", "E10"]
 
 #: follow-up iteration on the full data, targeting the Noisy class
 NOISY_SET = ["E13", "E14"]
+
+#: follow-up on the all-data set, targeting Other
+ECTOPY_SET = ["E15"]
 
 
 def _commit():
@@ -101,12 +107,13 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--data", required=True, help="folder with the training records")
     ap.add_argument("--tag", required=True, help="name for this data set, e.g. dev431 / full2000")
-    ap.add_argument("--set", choices=["all", "final", "noisy"], default="all")
+    ap.add_argument("--set", choices=["all", "final", "noisy", "ectopy"], default="all")
     ap.add_argument("--only", nargs="*", help="run only these ids (their references run too)")
     args = ap.parse_args()
 
     plan = {p[0]: p for p in PLAN}
-    want = args.only or {"final": FINAL_SET, "noisy": NOISY_SET}.get(args.set, [p[0] for p in PLAN if p[0] not in NOISY_SET])
+    want = args.only or {"final": FINAL_SET, "noisy": NOISY_SET, "ectopy": ECTOPY_SET}.get(
+        args.set, [p[0] for p in PLAN if p[0] not in NOISY_SET + ECTOPY_SET])
     order, seen = [], set()
 
     def need(i):

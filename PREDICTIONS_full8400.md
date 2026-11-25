@@ -46,3 +46,31 @@ What would change the final pipeline (rule unchanged — switch only on a *real 
   classifier to gradient boosting, train on all 8,408 records. Boosting settings were fixed in the
   code before any run (learning rate 0.05, 300 iterations, 15 leaves, L2 1.0, class weights) and were
   never tuned on these results.
+
+## Round 2 — targeting the Other class (`--set ectopy`), written 2026-11-25 BEFORE running on 8,408 records
+
+Why: on 8,408 records the largest remaining error is **Other called Normal**; Other F1 is 0.73. Our
+features describe the *average* beat, but "Other" is mostly about the *few* beats that differ. From
+the literature: Teijeiro et al. (2017 winners) define Other by extrasystoles/ventricular beats,
+wide QRS and long PR; Andreotti et al. (Oxford, `beat_class.m`) split beats into two shape templates
+to find the ectopic ones. So one change: **+7 beat-by-beat ectopy features** on top of E14.
+
+The features: fraction of abnormal-shape beats (corr < 0.85 with the template); fraction that are
+also premature (RR < 85 % of the local median) — the premature-ventricular-beat signature; QRS width
+of the abnormal-beat template; correlation between the two templates; 90th-percentile QRS width;
+fraction of beats wider than 1.5× the main template; P-peak-to-R-peak interval (PR proxy).
+
+Code check on the dev set (431 records, 113 Other) before writing this: no detectable difference
+(Δ +0.000 vs E14), Other F1 0.69 → 0.70. The dev set is too small to judge a gain in one class.
+
+Reference: E14 (macro-F1 0.756 ± 0.018, Other F1 0.73, F1(N,A,O) 0.807).
+
+| Run | Prediction (before running) | Why we expect it | What happened | Right? |
+|---|---|---|---|---|
+| E15 E14 + 7 ectopy features | **Other F1 up to about 0.74–0.76**; macro-F1 +0.005 to +0.015 — likely a **real gain** with 2,385 Other records, but "no detectable difference" is quite possible | the features target exactly the strips E04's averages miss (isolated ectopic beats); boosting can use rare-event features well; but E04's beat-correlation features already carry part of this |  |  |
+
+Decision rule (unchanged): switch only on a *real gain*, then freeze for good — no more rounds.
+
+### Reflection, round 2 (fill in after the run)
+
+-

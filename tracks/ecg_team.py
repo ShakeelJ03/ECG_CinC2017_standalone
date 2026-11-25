@@ -15,7 +15,7 @@ Every choice is a cfg key, so each experiment changes exactly one of them:
       "preprocess":  "none" | "bandpass" | "wavelet" | "denoise"   (supplied menu)
       "qrs":         "simple" (supplied detector) | "pt" (our Pan–Tompkins with adaptive thresholds)
       "feature_set": "base" or a "+"-joined list, e.g. "base+rr+morph+sqi"
-                     groups: base, rr, morph, sqi, wav, env
+                     groups: base, rr, morph, sqi, wav, env, ect
       "quality_on":  "clean" (quality features see the preprocessed signal, as the supplied code does)
                      | "raw" (quality features see the untouched signal; rhythm still uses the clean one)
       "clf":         "rf" | "et" | "hgb" | "logreg" | "svm"
@@ -381,10 +381,83 @@ def envelope_features(ecg, fs):
     return _finite([peak, lag, second / (peak + 1e-12)])
 
 
+# --------------------------------------------------------------------------- ectopy (beat by beat)
+ECT_NAMES = ["ect_abnormal_frac", "ect_premature_abnormal_frac", "ect_tpl2_qrs_width_ms",
+             "ect_tpl_corr_12", "ect_qrs_width_p90_ms", "ect_wide_beat_frac", "ect_p_to_r_ms"]
+
+
+def _qrs_width_ms(beat, r_idx, fs, frac=0.2):
+    """Width of the contiguous region around R where |beat| exceeds `frac` of |R amplitude|."""
+    amp = abs(beat[r_idx])
+    if amp < 1e-9:
+        return 0.0
+    thr = frac * amp
+    lo = r_idx
+    while lo > 0 and abs(beat[lo]) > thr:
+        lo -= 1
+    hi = r_idx
+    while hi < len(beat) - 1 and abs(beat[hi]) > thr:
+        hi += 1
+    return (hi - lo) / fs * 1000
+
+
+def ectopy_features(ecg, pk, fs):
+    """Beat-by-beat features for the Other class: the FEW beats that differ, not the average beat.
+
+    Grounded in two 2017 entries:
+    * Teijeiro et al. (winners) list what makes a strip "Other": extrasystoles / ventricular beats,
+      QRS wider than 110 ms, PR interval longer than 210 ms, abnormal heart rate.
+    * Andreotti et al. (Oxford, `beat_class.m`) split beats into two shape templates and assign each
+      beat to the closer one, so the minority template is the ectopic population.
+
+    Here: each beat (−0.10…+0.30 s around R, polarity-corrected, 0.5–40 Hz) is correlated with the
+    median template; corr < 0.85 marks an abnormal-shape beat. A beat that is also premature (its RR
+    is < 85 % of the local median RR) has the premature-ventricular-contraction signature. The
+    abnormal beats form a second template whose QRS width separates ventricular (wide) from
+    supraventricular ectopy. Our width measure (region above 20 % of the R amplitude in the 0.5–40 Hz
+    signal) captures the QRS core and reads ~40 ms on a normal beat, so Teijeiro's absolute 110 ms
+    rule doesn't transfer; we count beats wider than 1.5x the main template's QRS instead. The
+    P-peak-to-R-peak interval of the main template is a proxy for the PR interval (first-degree AV
+    block)."""
+    x = _bp(np.asarray(ecg, float), fs, 0.5, 40, order=2)
+    a, b = int(0.10 * fs), int(0.30 * fs)
+    pk = np.asarray([p for p in pk if p - int(PRE * fs) >= 0 and p + b < len(x)], int)
+    if len(pk) < 4:
+        return np.zeros(len(ECT_NAMES))
+    pol = 1.0 if np.median(x[pk]) >= 0 else -1.0
+    x = x * pol
+    beats = np.stack([x[p - a:p + b] for p in pk])
+    beats = beats - np.median(beats[:, : int(0.03 * fs)], axis=1, keepdims=True)
+    tpl = np.median(beats, axis=0)
+    if np.std(tpl) == 0:
+        return np.zeros(len(ECT_NAMES))
+    corr = np.array([np.corrcoef(bt, tpl)[0, 1] if np.std(bt) > 0 else 0.0 for bt in beats])
+    abn = corr < 0.85
+    rr = np.diff(pk) / fs
+    local = np.array([np.median(rr[max(0, i - 4):i + 5]) for i in range(len(rr))])
+    prem = np.r_[False, rr < 0.85 * local]                 # beat i is premature if RR before it is short
+    widths = np.array([_qrs_width_ms(bt, a, fs) for bt in beats])
+    w1 = _qrs_width_ms(tpl, a, fs)
+    if abn.sum() >= 2:
+        tpl2 = np.median(beats[abn], axis=0)
+        w2 = _qrs_width_ms(tpl2, a, fs)
+        c12 = np.corrcoef(tpl, tpl2)[0, 1] if np.std(tpl2) > 0 else 0.0
+    else:
+        w2, c12 = w1, 1.0
+    # P peak in the long template window 300–80 ms before R
+    pa = int(PRE * fs)
+    long_beats = np.stack([x[p - pa:p] for p in pk])
+    ltpl = np.median(long_beats - np.median(long_beats[:, :5], axis=1, keepdims=True), axis=0)
+    seg = ltpl[: pa - int(0.08 * fs)]
+    p_to_r = (pa - int(np.argmax(seg))) / fs * 1000 if len(seg) else 0.0
+    return _finite([abn.mean(), np.mean(abn & prem), w2, c12,
+                    np.percentile(widths, 90), np.mean(widths > 1.5 * max(w1, 1e-9)), p_to_r])
+
+
 BASE_NAMES = ["hr", "sdnn_ms", "rmssd_ms", "pnn50", "rr_cv", "rr_irr_frac", "n_beats",
               "qrs_hf_ratio", "powerline_49_51", "std", "kurtosis"]
 GROUP_NAMES = {"base": BASE_NAMES, "rr": RR_NAMES, "morph": MORPH_NAMES, "sqi": SQI_NAMES,
-               "wav": WAV_NAMES, "env": ENV_NAMES}
+               "wav": WAV_NAMES, "env": ENV_NAMES, "ect": ECT_NAMES}
 QUALITY_BASE = {"qrs_hf_ratio", "powerline_49_51", "std", "kurtosis"}
 
 
@@ -447,6 +520,8 @@ class ECGTeamTrack(ECGCinC2017Track):
                 feats += list(wavelet_features(qsig, fs))
             elif gname == "env":
                 feats += list(envelope_features(clean, fs))
+            elif gname == "ect":
+                feats += list(ectopy_features(clean, pk, fs))
         return np.array([_finite(feats)]), np.array([rec.labels[0]]), rec.group
 
     def _base(self, clean, qsig, fs, rr, cfg):
