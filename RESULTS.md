@@ -91,6 +91,9 @@ before running (`PREDICTIONS_full8400.md`). Same harness, same rule, same 10 con
 | E10 | 2026-11-19 | REVISIT: denoise with the robust detector | macro-F1 0.712 (sd 0.019); κ 0.656; F1(N,A,O) 0.785; F1 N/A/O/~ 0.89/0.77/0.70/0.49 | vs E03a: Δ +0.000, 12/25 — **no detectable difference** | preprocessing stays off | `b009d3f` |
 | E13 | 2026-11-19 | E04 + 9 signal-quality indices | macro-F1 0.745 (sd 0.019); κ 0.681; F1(N,A,O) 0.803; F1 N/A/O/~ 0.90/0.80/0.72/0.57 | vs E04: Δ +0.001, 17/25 — **no detectable difference** | not kept | `b009d3f` |
 | E14 | 2026-11-19 | gradient boosting on the E04 features | macro-F1 **0.756 (sd 0.018)**; κ 0.688; F1(N,A,O) 0.807; F1 N/A/O/~ 0.89/0.80/0.73/0.60 | vs E04: Δ +0.012, 20/25 — **real gain** | **kept → final pipeline** (Revision 3) | `b009d3f` |
+| E15 | 2026-11-25 | +7 beat-by-beat ectopy features (abnormal/premature beats, 2nd template, QRS width, P→R) on top of E14, aimed at Other (literature: Teijeiro 2017 criteria, Andreotti 2017 two-template beat classes) | macro-F1 0.760 (sd 0.020); κ 0.695; F1(N,A,O) 0.812; F1 N/A/O/~ 0.89/0.81/0.74/0.60 | vs E14: Δ +0.004, 16/25 folds — **no detectable difference** | not kept: right direction for Other/AF, but the gain is at the noise level; pipeline frozen at E14 | `fa6f47c` |
+
+**Round 2 on all data (2026-11-25):** E15 targeted the largest remaining error (Other → Normal) with beat-level ectopy features: no detectable difference → **frozen at E14**.
 
 **Finding:** Noisy did *not* improve with 4.2× more examples (E04: 0.58 → 0.57), so the data-limited
 diagnosis is falsified; the likely limit is label consistency. More data halved the fold SDs, which
@@ -125,7 +128,7 @@ made boosting's +0.012 detectable.
 |---|---|---|---|
 | dev set | Shakeel | harness, classifier/imbalance/selection experiments (E06–E09); reproduced all 21 dev runs on own PC |  |
 | full data | Shakeel | download (1,999 records), final comparison (8 runs), predictions + reflection, round 2 (E13–E14) |  |
-| all data | Shakeel | download (8,408 records), all-data comparison (10 runs), predictions + reflection, Revision 3 |  |
+| all data | Shakeel | download (8,408 records), all-data comparison (10 runs), predictions + reflection, Revision 3; E15 (ectopy features, from literature/GitHub review) |  |
 | dev set |  | preprocessing + QRS detection (E01, E02, E10–E12) |  |
 | dev set |  | features (E03–E05) |  |
 
@@ -138,5 +141,5 @@ made boosting's +0.012 detectable.
 | Held-out set — **scored once, never tuned against** | reported back by the instructor |  |
 | Supplied baseline, same harness |  |  |
 | Yardstick | CinC-2017 winners F1(N,A,O) ≈ 0.83 (Clifford et al. 2017) | hidden test set, 3-class score |
-| **Configurations compared** | 21 on the dev set (431) + 10 on 1,999 records + 10 on 8,408 records | dev set / short lists on the larger sets |
+| **Configurations compared** | 21 on the dev set (431) + 10 on 1,999 records + 11 on 8,408 records = 42 | dev set / short lists on the larger sets |
 | How option comparison was kept separate from final reporting | comparison budget fixed in advance; final short list re-run on the larger set |  |

@@ -67,10 +67,18 @@ Reference: E14 (macro-F1 0.756 ± 0.018, Other F1 0.73, F1(N,A,O) 0.807).
 
 | Run | Prediction (before running) | Why we expect it | What happened | Right? |
 |---|---|---|---|---|
-| E15 E14 + 7 ectopy features | **Other F1 up to about 0.74–0.76**; macro-F1 +0.005 to +0.015 — likely a **real gain** with 2,385 Other records, but "no detectable difference" is quite possible | the features target exactly the strips E04's averages miss (isolated ectopic beats); boosting can use rare-event features well; but E04's beat-correlation features already carry part of this |  |  |
+| E15 E14 + 7 ectopy features | **Other F1 up to about 0.74–0.76**; macro-F1 +0.005 to +0.015 — likely a **real gain** with 2,385 Other records, but "no detectable difference" is quite possible | the features target exactly the strips E04's averages miss (isolated ectopic beats); boosting can use rare-event features well; but E04's beat-correlation features already carry part of this | 0.760 ± 0.020; Δ +0.004 (SE 0.002), 16/25 folds — **no detectable difference**; Other 0.73 → 0.74, AF 0.80 → 0.81, F1(N,A,O) 0.812 | Other range yes (low end); "likely a real gain" no; "no detectable difference possible" yes |
 
 Decision rule (unchanged): switch only on a *real gain*, then freeze for good — no more rounds.
 
-### Reflection, round 2 (fill in after the run)
+### Reflection, round 2
 
--
+- The ectopy features move the right classes in the right direction (Other 0.73 → 0.74, AF
+  0.80 → 0.81, better in 16/25 folds), but the gain (+0.004) is at about 2 × its standard error,
+  so by our rule it is not shown. E04's beat-to-template correlation features most likely already
+  carry most of the ectopic-beat information.
+- We predicted a likely real gain; that was too optimistic. The Other class seems limited by
+  conditions our single-lead beat features can't see (conduction and repolarisation changes,
+  label disagreement), not only by isolated ectopic beats.
+- **Decision:** keep E14. A borderline +0.004 is exactly the kind of difference the course says
+  not to call an improvement. **Pipeline frozen at E14** — no further rounds.
