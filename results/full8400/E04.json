@@ -144,13 +144,13 @@
    131
   ]
  ],
- "seconds": 159.5,
+ "seconds": 148.0,
  "id": "E04",
  "stage": "3 features",
  "ref": "E03a",
  "why": "morphology on top of the rhythm features",
- "date": "2026-11-19",
- "commit": "b009d3f",
+ "date": "2026-11-25",
+ "commit": "fa6f47c",
  "data": "C:/cm2013_data/ecg/train_full",
  "vs_ref": {
   "delta": 0.03188867149214352,

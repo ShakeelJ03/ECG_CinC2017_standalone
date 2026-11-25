@@ -145,13 +145,13 @@
    164
   ]
  ],
- "seconds": 42.3,
+ "seconds": 43.6,
  "id": "E14",
  "stage": "5 classifier",
  "ref": "E04",
  "why": "gradient boosting on the E04 features instead of random forest",
- "date": "2026-11-19",
- "commit": "b009d3f",
+ "date": "2026-11-25",
+ "commit": "fa6f47c",
  "data": "C:/cm2013_data/ecg/train_full",
  "vs_ref": {
   "delta": 0.012266460923214196,
