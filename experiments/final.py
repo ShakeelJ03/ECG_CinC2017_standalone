@@ -26,7 +26,7 @@ from ecg_team import ECGTeamTrack                     # noqa: E402
 
 #: The pipeline chosen by the final comparison. Update it from your own full-data results
 #: (results/full2000/table.md) before step 1 — and log why in RESULTS.md.
-FINAL_CFG = {"seed": 0, "qrs": "pt", "feature_set": "base+rr+morph", "clf": "rf", "imbalance": "balanced"}   # = E04 (full2000, 2026-11-18)
+FINAL_CFG = {"seed": 0, "qrs": "pt", "feature_set": "base+rr+morph", "clf": "hgb", "imbalance": "balanced"}   # = E14 (full8400, 2026-11-19, Revision 3)
 
 MODEL = os.path.join(ROOT, "models", "final_model.pkl")
 EXPECTED = os.path.join(ROOT, "EXPECTED_SCORE.md")
